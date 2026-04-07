@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C:\hristina Morillo — Theme Explorer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Serif+Display:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Space Mono', monospace;
+      background: #f4f4f4;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+
+    .te-root { max-width: 900px; margin: 0 auto; }
+
+    .te-header {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 1.25rem;
+    }
+
+    .te-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 1rem 1.25rem;
+      background: #fff;
+      border: 0.5px solid #ddd;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+
+    .te-label {
+      font-size: 11px;
+      color: #888;
+      letter-spacing: 0.06em;
+      margin-right: 4px;
+    }
+
+    .te-btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      padding: 6px 14px;
+      border: 0.5px solid #ccc;
+      background: transparent;
+      color: #888;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.15s;
+    }
+    .te-btn:hover { background: #f5f5f5; color: #333; }
+    .te-btn.active { border-color: #111; color: #111; background: #f0f0f0; }
+
+    .te-divider { width: 1px; height: 20px; background: #e0e0e0; margin: 0 4px; }
+
+    .te-preview {
+      border: 0.5px solid #ddd;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    .te-nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.5rem;
+      border-bottom: 1px solid;
+      font-size: 11px;
+    }
+    .te-nav-links { display: flex; gap: 1.5rem; }
+    .te-nav-link { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; }
+
+    .te-hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 260px; }
+
+    .te-left {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .te-right {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 4px;
+    }
+
+    .te-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .te-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    .te-headline { font-size: 2rem; line-height: 1.1; font-weight: 400; margin: 0; }
+
+    .te-tagline { font-size: 11px; line-height: 1.9; letter-spacing: 0.03em; }
+
+    .te-ctas { display: flex; gap: 8px; }
+
+    .te-cta {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 7px 16px;
+      border: 1px solid;
+      cursor: default;
+    }
+
+    .te-stat {
+      padding: 10px 14px;
+      border: 1px solid;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .te-stat-l { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; }
+    .te-stat-v { font-size: 1.2rem; }
+
+    .te-about {
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      border-top: 1px solid;
+    }
+
+    .te-aside-name { font-size: 1.1rem; font-weight: 400; margin-bottom: 0.4rem; }
+
+    .te-tag {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      display: inline-block;
+      margin-bottom: 1rem;
+      border: 1px solid;
+    }
+
+    .te-section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .te-bio-text { font-size: 0.95rem; line-height: 1.75; font-weight: 400; }
+  </style>
+</head>
+<body>
+<div class="te-root">
+
+  <div class="te-header">C:\hristina Morillo — Theme Explorer</div>
+
+  <div class="te-controls">
+    <span class="te-label">Theme</span>
+    <button class="te-btn active" onclick="setTheme('dark')"       id="btn-dark">Dark terminal</button>
+    <button class="te-btn"        onclick="setTheme('light')"      id="btn-light">Clean light</button>
+    <button class="te-btn"        onclick="setTheme('cream')"      id="btn-cream">Warm cream</button>
+    <div class="te-divider"></div>
+    <span class="te-label">Font</span>
+    <button class="te-btn active" onclick="setFont('dm')"          id="btn-dm">DM Serif</button>
+    <button class="te-btn"        onclick="setFont('playfair')"    id="btn-playfair">Playfair</button>
+    <button class="te-btn"        onclick="setFont('instrument')"  id="btn-instrument">Instrument</button>
+  </div>
+
+  <div class="te-preview" id="preview">
+
+    <div class="te-nav-bar" id="navBar">
+      <div id="navLogo" style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:0.06em;"></div>
+      <div class="te-nav-links">
+        <span class="te-nav-link" id="nl1">About</span>
+        <span class="te-nav-link" id="nl2">Blog</span>
+        <span class="te-nav-link" id="nl3">Podcast</span>
+        <span class="te-nav-link" id="nl4">Links</span>
+      </div>
+    </div>
+
+    <div class="te-hero">
+      <div class="te-left">
+        <div class="te-eyebrow" id="eyebrow">
+          <div class="te-dot" id="dot"></div>
+          <span id="eyebrowText">CISO &amp; Published Author</span>
+        </div>
+        <h1 class="te-headline" id="headline">
+          Making security<br><em id="emWord">accessible,</em><br>approachable.
+        </h1>
+        <div class="te-tagline" id="tagline">
+          Head of InfoSec · NY Football Giants<br>
+          O'Reilly Author · WoCinTech Co-Founder
+        </div>
+        <div class="te-ctas">
+          <div class="te-cta" id="cta1">Read the Blog</div>
+          <div class="te-cta" id="cta2">Books &amp; Links →</div>
+        </div>
+      </div>
+      <div class="te-right" id="rightPanel">
+        <div class="te-stat" id="s1">
+          <span class="te-stat-l" id="sl1">Career Span</span>
+          <span class="te-stat-v" id="sv1">20+ yrs</span>
+        </div>
+        <div class="te-stat" id="s2">
+          <span class="te-stat-l" id="sl2">Books Published</span>
+          <span class="te-stat-v" id="sv2">2+</span>
+        </div>
+        <div class="te-stat" id="s3">
+          <span class="te-stat-l" id="sl3">WoCinTech Est.</span>
+          <span class="te-stat-v" id="sv3">2015</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="te-about" id="aboutSection">
+      <div>
+        <div class="te-section-label" id="sectionLabel">About C:\</div>
+        <div class="te-aside-name" id="asideName">Christina Morillo</div>
+        <div class="te-tag" id="roleTag">HEAD OF INFOSEC</div>
+      </div>
+      <div class="te-bio-text" id="bioText">
+        Enterprise Information Security Leader with a distinguished career spanning over two decades. CISO, published O'Reilly author, and Co-Founder of Women of Color in Tech Stock Photos.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const themes = {
+    dark: {
+      bg: '#0a0a0a', bg1: '#0f0f0f', border: '#222', border2: '#2a2a2a',
+      text: '#e8e4d9', text2: '#c8c4b8', muted: '#555', accent: '#c8f55a',
+      accentBg: 'rgba(200,245,90,0.08)', accentBorder: 'rgba(200,245,90,0.2)',
+      navBg: 'rgba(10,10,10,0.96)', statBg: 'rgba(10,10,10,0.88)',
+      gridColor: 'rgba(200,245,90,0.03)',
+      logoPrefix: '#c8f55a', logoSuffix: '#e8e4d9',
+      cta1Bg: 'transparent', cta1Text: '#c8f55a', cta1Border: '#c8f55a',
+      cta2Bg: 'transparent', cta2Text: '#888', cta2Border: '#333',
+    },
+    light: {
+      bg: '#ffffff', bg1: '#f8f8f8', border: '#e0e0e0', border2: '#ebebeb',
+      text: '#0a0a0a', text2: '#333', muted: '#888', accent: '#1a1a1a',
+      accentBg: '#f0f0f0', accentBorder: '#ccc',
+      navBg: 'rgba(255,255,255,0.96)', statBg: '#ffffff',
+      gridColor: 'rgba(0,0,0,0.04)',
+      logoPrefix: '#0a0a0a', logoSuffix: '#0a0a0a',
+      cta1Bg: '#0a0a0a', cta1Text: '#fff', cta1Border: '#0a0a0a',
+      cta2Bg: 'transparent', cta2Text: '#888', cta2Border: '#ddd',
+    },
+    cream: {
+      bg: '#f5f0e8', bg1: '#ede8df', border: '#d8d0c0', border2: '#e4ddd0',
+      text: '#1c1814', text2: '#3d3530', muted: '#8a7f72', accent: '#8b4513',
+      accentBg: 'rgba(139,69,19,0.07)', accentBorder: 'rgba(139,69,19,0.22)',
+      navBg: 'rgba(245,240,232,0.96)', statBg: 'rgba(245,240,232,0.9)',
+      gridColor: 'rgba(139,69,19,0.04)',
+      logoPrefix: '#8b4513', logoSuffix: '#1c1814',
+      cta1Bg: '#1c1814', cta1Text: '#f5f0e8', cta1Border: '#1c1814',
+      cta2Bg: 'transparent', cta2Text: '#8a7f72', cta2Border: '#c8bfb0',
+    }
+  };
+
+  const fonts = {
+    dm:         { serif: "'DM Serif Display', serif" },
+    playfair:   { serif: "'Playfair Display', serif" },
+    instrument: { serif: "'Instrument Serif', serif" },
+  };
+
+  let currentTheme = 'dark';
+  let currentFont  = 'dm';
+
+  function applyTheme(t, f) {
+    const T = themes[t];
+    const F = fonts[f];
+
+    document.getElementById('preview').style.background = T.bg;
+    document.getElementById('preview').style.borderColor = T.border2;
+
+    const navBar = document.getElementById('navBar');
+    navBar.style.background = T.navBg;
+    navBar.style.borderColor = T.border;
+
+    document.getElementById('navLogo').innerHTML =
+      `<span style="color:${T.logoPrefix}">C:\\</span><span style="color:${T.logoSuffix}">hristina Morillo</span>`;
+
+    ['nl1','nl2','nl3','nl4'].forEach(id => {
+      document.getElementById(id).style.color = T.muted;
+    });
+
+    document.getElementById('dot').style.background = T.accent;
+    document.getElementById('eyebrowText').style.color = T.accent;
+
+    const headline = document.getElementById('headline');
+    headline.style.color = T.text;
+    headline.style.fontFamily = F.serif;
+    document.getElementById('emWord').style.color = T.accent;
+
+    document.getElementById('tagline').style.color = T.muted;
+
+    const cta1 = document.getElementById('cta1');
+    cta1.style.background = T.cta1Bg;
+    cta1.style.color = T.cta1Text;
+    cta1.style.borderColor = T.cta1Border;
+
+    const cta2 = document.getElementById('cta2');
+    cta2.style.background = T.cta2Bg;
+    cta2.style.color = T.cta2Text;
+    cta2.style.borderColor = T.cta2Border;
+
+    const rightPanel = document.getElementById('rightPanel');
+    rightPanel.style.background = t === 'dark'
+      ? `repeating-linear-gradient(0deg,${T.gridColor} 0,${T.gridColor} 1px,transparent 1px,transparent 44px),repeating-linear-gradient(90deg,${T.gridColor} 0,${T.gridColor} 1px,transparent 1px,transparent 44px),${T.bg1}`
+      : T.bg1;
+    rightPanel.style.borderLeft = `1px solid ${T.border}`;
+
+    ['s1','s2','s3'].forEach((id, i) => {
+      const s = document.getElementById(id);
+      s.style.background = T.statBg;
+      s.style.borderColor = T.border;
+      document.getElementById('sl' + (i+1)).style.color = T.muted;
+      const sv = document.getElementById('sv' + (i+1));
+      sv.style.color = T.accent;
+      sv.style.fontFamily = F.serif;
+    });
+
+    const about = document.getElementById('aboutSection');
+    about.style.background = T.bg1;
+    about.style.borderColor = T.border;
+
+    document.getElementById('sectionLabel').style.color = T.muted;
+
+    const asideName = document.getElementById('asideName');
+    asideName.style.color = T.text;
+    asideName.style.fontFamily = F.serif;
+
+    const tag = document.getElementById('roleTag');
+    tag.style.color = T.accent;
+    tag.style.background = T.accentBg;
+    tag.style.borderColor = T.accentBorder;
+
+    const bio = document.getElementById('bioText');
+    bio.style.color = T.text2;
+    bio.style.fontFamily = F.serif;
+  }
+
+  function setTheme(t) {
+    currentTheme = t;
+    ['dark','light','cream'].forEach(k => {
+      document.getElementById('btn-' + k).classList.toggle('active', k === t);
+    });
+    applyTheme(currentTheme, currentFont);
+  }
+
+  function setFont(f) {
+    currentFont = f;
+    ['dm','playfair','instrument'].forEach(k => {
+      document.getElementById('btn-' + k).classList.toggle('active', k === f);
+    });
+    applyTheme(currentTheme, currentFont);
+  }
+
+  applyTheme('dark', 'dm');
+</script>
+</body>
+</html>
